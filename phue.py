@@ -38,7 +38,7 @@ if platform.system() == 'Windows':
 else:
     USER_HOME = 'HOME'
 
-__version__ = '1.1'
+__version__ = '1.0'
 
 
 def is_string(data):
@@ -74,7 +74,6 @@ class Light(object):
     def __init__(self, bridge, light_id):
         self.bridge = bridge
         self.light_id = light_id
-
         self._name = None
         self._on = None
         self._brightness = None
@@ -89,6 +88,7 @@ class Light(object):
         self._reset_bri_after_on = None
         self._reachable = None
         self._type = None
+        self._modelid = None
 
     def __repr__(self):
         # like default python repr function, but add light name
@@ -300,6 +300,11 @@ class Light(object):
         self._type = self._get('type')
         return self._type
 
+    @property
+    def modelid(self):
+        '''Get model id of light'''
+        self._modelid = self._get('modelid')
+        return self._modelid
 
 class SensorState(dict):
     def __init__(self, bridge, sensor_id):
@@ -848,7 +853,7 @@ class Bridge(object):
             'GET', '/api/' + self.username + '/lights/' + str(light_id))
         if parameter is None:
             return state
-        if parameter in ['name', 'type', 'uniqueid', 'swversion']:
+        if parameter in ['name', 'type', 'uniqueid', 'swversion', 'modelid']:
             return state[parameter]
         else:
             try:
